@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -53,25 +53,69 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-void Foam::writeFuns::swapWord(label& word32)
+void Foam::writeFuns::swapWord32(char* word32)
 {
-    char* mem = reinterpret_cast<char*>(&word32);
+    char a = word32[0];
+    word32[0] = word32[3];
+    word32[3] = a;
 
-    char a = mem[0];
-    mem[0] = mem[3];
-    mem[3] = a;
-
-    a = mem[1];
-    mem[1] = mem[2];
-    mem[2] = a;
+    a = word32[1];
+    word32[1] = word32[2];
+    word32[2] = a;
 }
 
 
-void Foam::writeFuns::swapWords(const label nWords, label* words32)
+void Foam::writeFuns::swapWord64(char* word64)
 {
-    for (label i = 0; i < nWords; i++)
+    char a = word64[0];
+    word64[0] = word64[7];
+    word64[7] = a;
+
+    a = word64[1];
+    word64[1] = word64[6];
+    word64[6] = a;
+
+    a = word64[2];
+    word64[2] = word64[5];
+    word64[5] = a;
+
+    a = word64[3];
+    word64[3] = word64[4];
+    word64[4] = a;
+}
+
+
+void Foam::writeFuns::swapWords
+(
+    const label nWords,
+    char* words,
+    const label wordSize
+)
+{
+    if(wordSize==4)
     {
-        swapWord(words32[i]);
+        char* word32 = words;
+        for (label w = 0; w < nWords; word32+=wordSize, w++)
+        {
+            swapWord32(word32);
+        }
+    }
+    else if(wordSize==8)
+    {
+        char* word64 = words;
+        for (label w = 0; w < nWords; word64+=wordSize, w++)
+        {
+            swapWord64(word64);
+        }
+    }
+    else
+    {
+        FatalErrorInFunction
+            << "unsupported word size of " << wordSize << nl
+            << "Please report this issue on the bug tracker and please provide"
+            << " complete details for reproducing this error."
+            << exit(FatalError);
+
     }
 }
 
@@ -80,18 +124,23 @@ void Foam::writeFuns::write
 (
     std::ostream& os,
     const bool binary,
-    List<floatScalar>& fField
+    List<scalar>& fField
 )
 {
     if (binary)
     {
 #       ifdef LITTLEENDIAN
-        swapWords(fField.size(), reinterpret_cast<label*>(fField.begin()));
+        swapWords
+        (
+            fField.size(),
+            reinterpret_cast<char*>(fField.begin()),
+            sizeof(scalar)
+        );
 #       endif
         os.write
         (
             reinterpret_cast<char*>(fField.begin()),
-            fField.size()*sizeof(float)
+            fField.size()*sizeof(scalar)
         );
 
         os  << std::endl;
@@ -120,10 +169,10 @@ void Foam::writeFuns::write
 (
     std::ostream& os,
     const bool binary,
-    DynamicList<floatScalar>& fField
+    DynamicList<scalar>& fField
 )
 {
-    List<floatScalar>& fld = fField.shrink();
+    List<scalar>& fld = fField.shrink();
 
     write(os, binary, fld);
 }
@@ -139,7 +188,12 @@ void Foam::writeFuns::write
     if (binary)
     {
 #       ifdef LITTLEENDIAN
-        swapWords(elems.size(), reinterpret_cast<label*>(elems.begin()));
+        swapWords
+        (
+            elems.size(),
+            reinterpret_cast<char*>(elems.begin()),
+            sizeof(label)
+        );
 #       endif
         os.write
         (
@@ -227,17 +281,17 @@ void Foam::writeFuns::writePointDataHeader
 }
 
 
-void Foam::writeFuns::insert(const scalar src, DynamicList<floatScalar>& dest)
+void Foam::writeFuns::insert(const scalar src, DynamicList<scalar>& dest)
 {
-    dest.append(float(src));
+    dest.append(src);
 }
 
 
-void Foam::writeFuns::insert(const vector& src, DynamicList<floatScalar>& dest)
+void Foam::writeFuns::insert(const vector& src, DynamicList<scalar>& dest)
 {
     for (direction cmpt = 0; cmpt < vector::nComponents; ++cmpt)
     {
-        dest.append(float(src[cmpt]));
+        dest.append(src[cmpt]);
     }
 }
 
@@ -245,12 +299,12 @@ void Foam::writeFuns::insert(const vector& src, DynamicList<floatScalar>& dest)
 void Foam::writeFuns::insert
 (
     const sphericalTensor& src,
-    DynamicList<floatScalar>& dest
+    DynamicList<scalar>& dest
 )
 {
     for (direction cmpt = 0; cmpt < sphericalTensor::nComponents; ++cmpt)
     {
-        dest.append(float(src[cmpt]));
+        dest.append(src[cmpt]);
     }
 }
 
@@ -258,23 +312,23 @@ void Foam::writeFuns::insert
 void Foam::writeFuns::insert
 (
     const symmTensor& src,
-    DynamicList<floatScalar>& dest
+    DynamicList<scalar>& dest
 )
 {
-    dest.append(float(src.xx()));
-    dest.append(float(src.yy()));
-    dest.append(float(src.zz()));
-    dest.append(float(src.xy()));
-    dest.append(float(src.yz()));
-    dest.append(float(src.xz()));
+    dest.append(src.xx());
+    dest.append(src.yy());
+    dest.append(src.zz());
+    dest.append(src.xy());
+    dest.append(src.yz());
+    dest.append(src.xz());
 }
 
 
-void Foam::writeFuns::insert(const tensor& src, DynamicList<floatScalar>& dest)
+void Foam::writeFuns::insert(const tensor& src, DynamicList<scalar>& dest)
 {
     for (direction cmpt = 0; cmpt < tensor::nComponents; ++cmpt)
     {
-        dest.append(float(src[cmpt]));
+        dest.append(src[cmpt]);
     }
 }
 

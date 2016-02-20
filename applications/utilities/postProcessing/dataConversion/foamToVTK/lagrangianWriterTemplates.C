@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -50,9 +50,9 @@ void Foam::lagrangianWriter::writeIOField(const wordList& objects)
         IOField<Type> fld(header);
 
         os_ << object << ' ' << pTraits<Type>::nComponents << ' '
-            << fld.size() << " float" << std::endl;
+            << fld.size() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> fField(pTraits<Type>::nComponents*fld.size());
+        DynamicList<scalar> fField(pTraits<Type>::nComponents*fld.size());
 
         writeFuns::insert(fld, fField);
 

@@ -35,12 +35,24 @@ SourceFiles
 #ifndef writeFuns_H
 #define writeFuns_H
 
-#include "floatScalar.H"
+#include "scalar.H"
 #include "DynamicList.H"
 #include "volFieldsFwd.H"
 #include "pointFieldsFwd.H"
 #include "vtkMesh.H"
 #include "volPointInterpolation.H"
+
+#if defined(WM_SP)
+#define FLOATING_DATA_TYPE_STRING " float"
+#elif defined(WM_DP)
+#define FLOATING_DATA_TYPE_STRING " double"
+#endif
+
+#if WM_LABEL_SIZE == 32
+#define INTEGER_DATA_TYPE_STRING " int"
+#elif WM_LABEL_SIZE == 64
+#define INTEGER_DATA_TYPE_STRING " vtktypeint64"
+#endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -57,16 +69,22 @@ class writeFuns
 
         // Swap halves of word.
 
-            static void swapWord(label& word32);
-            static void swapWords(const label nWords, label* words32);
+            static void swapWord32(char* word32);
+            static void swapWord64(char* word64);
+            static void swapWords
+            (
+                const label nWords,
+                char* words,
+                const label wordSize
+            );
 
 
 public:
 
     // Write ascii or binary. If binary optionally in-place swaps argument
 
-        static void write(std::ostream&, const bool, List<floatScalar>&);
-        static void write(std::ostream&, const bool, DynamicList<floatScalar>&);
+        static void write(std::ostream&, const bool, List<scalar>&);
+        static void write(std::ostream&, const bool, DynamicList<scalar>&);
         static void write(std::ostream&, const bool, labelList&);
         static void write(std::ostream&, const bool, DynamicList<label>&);
 
@@ -95,17 +113,17 @@ public:
 
     // Convert to VTK and store
 
-        static void insert(const scalar, DynamicList<floatScalar>&);
-        static void insert(const point&, DynamicList<floatScalar>&);
-        static void insert(const sphericalTensor&, DynamicList<floatScalar>&);
-        static void insert(const symmTensor&, DynamicList<floatScalar>&);
-        static void insert(const tensor&, DynamicList<floatScalar>&);
+        static void insert(const scalar, DynamicList<scalar>&);
+        static void insert(const point&, DynamicList<scalar>&);
+        static void insert(const sphericalTensor&, DynamicList<scalar>&);
+        static void insert(const symmTensor&, DynamicList<scalar>&);
+        static void insert(const tensor&, DynamicList<scalar>&);
 
 
     //- Append elements to DynamicList
     static void insert(const labelList&, DynamicList<label>&);
     template<class Type>
-    static void insert(const List<Type>&, DynamicList<floatScalar>&);
+    static void insert(const List<Type>&, DynamicList<scalar>&);
 
     //- Write volField with cell values (including decomposed cells)
     template<class Type>

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -57,9 +57,9 @@ Foam::internalWriter::internalWriter
     const labelList& addPointCellLabels = topo.addPointCellLabels();
     const label nTotPoints = mesh.nPoints() + addPointCellLabels.size();
 
-    os_ << "POINTS " << nTotPoints << " float" << std::endl;
+    os_ << "POINTS " << nTotPoints << FLOATING_DATA_TYPE_STRING << std::endl;
 
-    DynamicList<floatScalar> ptField(3*nTotPoints);
+    DynamicList<scalar> ptField(3*nTotPoints);
 
     writeFuns::insert(mesh.points(), ptField);
 
@@ -123,7 +123,10 @@ void Foam::internalWriter::writeCellIDs()
     const labelList& superCells = topo.superCells();
 
     // Cell ids first
-    os_ << "cellID 1 " << vtkCellTypes.size() << " int" << std::endl;
+    os_ << "cellID 1 "
+        << vtkCellTypes.size()
+        << INTEGER_DATA_TYPE_STRING
+        << std::endl;
 
     labelList cellId(vtkCellTypes.size());
     label labelI = 0;

@@ -72,9 +72,9 @@ void Foam::surfaceMeshWriter::write
             sflds[fieldI];
 
         os_ << fld.name() << ' ' << pTraits<Type>::nComponents << ' '
-            << pp_.size() << " float" << std::endl;
+            << pp_.size() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> fField(pTraits<Type>::nComponents*pp_.size());
+        DynamicList<scalar> fField(pTraits<Type>::nComponents*pp_.size());
         writeFuns::insert(getFaceField(fld)(), fField);
         writeFuns::write(os_, binary_, fField);
     }

@@ -39,9 +39,9 @@ void Foam::patchWriter::write
         const GeometricField<Type, fvPatchField, volMesh>& fld = flds[fieldI];
 
         os_ << fld.name() << ' ' << pTraits<Type>::nComponents << ' '
-            << nFaces_ << " float" << std::endl;
+            << nFaces_ << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> fField(pTraits<Type>::nComponents*nFaces_);
+        DynamicList<scalar> fField(pTraits<Type>::nComponents*nFaces_);
 
         forAll(patchIDs_, j)
         {
@@ -75,9 +75,9 @@ void Foam::patchWriter::write
             flds[fieldI];
 
         os_ << fld.name() << ' ' << pTraits<Type>::nComponents << ' '
-            << nPoints_ << " float" << std::endl;
+            << nPoints_ << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> fField(pTraits<Type>::nComponents*nPoints_);
+        DynamicList<scalar> fField(pTraits<Type>::nComponents*nPoints_);
 
         forAll(patchIDs_, j)
         {
@@ -104,9 +104,9 @@ void Foam::patchWriter::write
         const GeometricField<Type, fvPatchField, volMesh>& fld = flds[fieldI];
 
         os_ << fld.name() << ' ' << pTraits<Type>::nComponents << ' '
-            << nPoints_ << " float" << std::endl;
+            << nPoints_ << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> fField(pTraits<Type>::nComponents*nPoints_);
+        DynamicList<scalar> fField(pTraits<Type>::nComponents*nPoints_);
 
         forAll(patchIDs_, j)
         {

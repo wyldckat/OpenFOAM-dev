@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -74,9 +74,9 @@ void Foam::writeFaceSet
 
     // Write points and faces as polygons
 
-    ostr<< "POINTS " << fp.nPoints() << " float" << std::endl;
+    ostr<< "POINTS " << fp.nPoints() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-    DynamicList<floatScalar> ptField(3*fp.nPoints());
+    DynamicList<scalar> ptField(3*fp.nPoints());
 
     writeFuns::insert(fp.localPoints(), ptField);
 
@@ -118,7 +118,7 @@ void Foam::writeFaceSet
         << "FIELD attributes 1" << std::endl;
 
     // Cell ids first
-    ostr<< "faceID 1 " << fp.size() << " int" << std::endl;
+    ostr<< "faceID 1 " << fp.size() << INTEGER_DATA_TYPE_STRING << std::endl;
 
     writeFuns::write(ostr, binary, setFaceLabels);
 }

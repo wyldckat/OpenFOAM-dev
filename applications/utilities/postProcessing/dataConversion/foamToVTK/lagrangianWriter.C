@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -55,7 +55,7 @@ Foam::lagrangianWriter::lagrangianWriter
     {
         nParcels_ = 0;
 
-        os_ << "POINTS " << nParcels_ << " float" << std::endl;
+        os_ << "POINTS " << nParcels_ << FLOATING_DATA_TYPE_STRING << std::endl;
     }
     else
     {
@@ -63,9 +63,9 @@ Foam::lagrangianWriter::lagrangianWriter
 
         nParcels_ = parcels.size();
 
-        os_ << "POINTS " << nParcels_ << " float" << std::endl;
+        os_ << "POINTS " << nParcels_ << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> partField(3*parcels.size());
+        DynamicList<scalar> partField(3*parcels.size());
 
         forAllConstIter(Cloud<passiveParticle>, parcels, elmnt)
         {

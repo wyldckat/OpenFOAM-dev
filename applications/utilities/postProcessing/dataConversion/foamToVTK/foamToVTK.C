@@ -324,20 +324,11 @@ int main(int argc, char *argv[])
     const bool doWriteInternal = !args.optionFound("noInternal");
     const bool doFaceZones     = !args.optionFound("noFaceZones");
     const bool doLinks         = !args.optionFound("noLinks");
-    bool binary                = !args.optionFound("ascii");
+    const bool binary          = !args.optionFound("ascii");
     const bool useTimeName     = args.optionFound("useTimeName");
 
     // Decomposition of polyhedral cells into tets/pyramids cells
     vtkTopo::decomposePoly     = !args.optionFound("poly");
-
-    if (binary && (sizeof(floatScalar) != 4 || sizeof(label) != 4))
-    {
-        WarningInFunction
-            << "Using ASCII rather than binary VTK format because "
-               "floatScalar and/or label are not 4 bytes in size."
-            << nl << endl;
-        binary = false;
-    }
 
     const bool nearCellValue = args.optionFound("nearCellValue");
 

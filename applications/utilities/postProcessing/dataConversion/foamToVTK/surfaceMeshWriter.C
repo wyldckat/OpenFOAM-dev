@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2013 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -54,9 +54,9 @@ Foam::surfaceMeshWriter::surfaceMeshWriter
         nFaceVerts += pp[faceI].size() + 1;
     }
 
-    os_ << "POINTS " << pp.nPoints() << " float" << std::endl;
+    os_ << "POINTS " << pp.nPoints() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-    DynamicList<floatScalar> ptField(3*pp.nPoints());
+    DynamicList<scalar> ptField(3*pp.nPoints());
     writeFuns::insert(pp.localPoints(), ptField);
     writeFuns::write(os_, binary, ptField);
 

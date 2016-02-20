@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -25,7 +25,7 @@ License
 
 #include "writeSurfFields.H"
 #include "OFstream.H"
-#include "floatScalar.H"
+#include "scalar.H"
 #include "writeFuns.H"
 #include "emptyFvsPatchFields.H"
 #include "fvsPatchFields.H"
@@ -60,9 +60,9 @@ void writeSurfFields
 
     const pointField& fc = mesh.faceCentres();
 
-    str << "POINTS " << mesh.nFaces() << " float" << std::endl;
+    str << "POINTS " << mesh.nFaces() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-    DynamicList<floatScalar> pField(3*mesh.nFaces());
+    DynamicList<scalar> pField(3*mesh.nFaces());
 
     for (label faceI = 0; faceI < mesh.nFaces(); faceI++)
     {
@@ -80,9 +80,9 @@ void writeSurfFields
         const surfaceVectorField& svf = surfVectorFields[fieldI];
 
         str << svf.name() << " 3 "
-            << mesh.nFaces() << " float" << std::endl;
+            << mesh.nFaces() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-        DynamicList<floatScalar> fField(3*mesh.nFaces());
+        DynamicList<scalar> fField(3*mesh.nFaces());
 
         for (label faceI = 0; faceI < mesh.nInternalFaces(); faceI++)
         {

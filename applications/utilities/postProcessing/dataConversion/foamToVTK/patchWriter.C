@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -76,9 +76,9 @@ Foam::patchWriter::patchWriter
         }
     }
 
-    os_ << "POINTS " << nPoints_ << " float" << std::endl;
+    os_ << "POINTS " << nPoints_ << FLOATING_DATA_TYPE_STRING << std::endl;
 
-    DynamicList<floatScalar> ptField(3*nPoints_);
+    DynamicList<scalar> ptField(3*nPoints_);
 
     forAll(patchIDs_, i)
     {
@@ -117,9 +117,9 @@ void Foam::patchWriter::writePatchIDs()
 {
     const fvMesh& mesh = vMesh_.mesh();
 
-    DynamicList<floatScalar> fField(nFaces_);
+    DynamicList<scalar> fField(nFaces_);
 
-    os_ << "patchID 1 " << nFaces_ << " float" << std::endl;
+    os_ << "patchID 1 " << nFaces_ << FLOATING_DATA_TYPE_STRING << std::endl;
 
     forAll(patchIDs_, i)
     {

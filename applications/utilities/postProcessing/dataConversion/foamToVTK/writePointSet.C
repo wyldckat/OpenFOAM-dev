@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -62,9 +62,9 @@ void writePointSet
 
     // Write points
 
-    ostr<< "POINTS " << set.size() << " float" << std::endl;
+    ostr<< "POINTS " << set.size() << FLOATING_DATA_TYPE_STRING << std::endl;
 
-    DynamicList<floatScalar> ptField(3*set.size());
+    DynamicList<scalar> ptField(3*set.size());
 
     writeFuns::insert
     (
@@ -88,7 +88,7 @@ void writePointSet
         << "FIELD attributes 1" << std::endl;
 
     // Cell ids first
-    ostr<< "pointID 1 " << set.size() << " int" << std::endl;
+    ostr<< "pointID 1 " << set.size() << INTEGER_DATA_TYPE_STRING << std::endl;
 
     labelList pointIDs(set.toc());
 
