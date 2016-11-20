@@ -1,7 +1,7 @@
 EXE_INC = \
     /* -DFULLDEBUG -g -O0 */ \
-    -I$(METIS_ARCH_PATH)/include \
+    -I$(METIS_INCLUDE_PATH) \
     -I../decompositionMethods/lnInclude
 
 LIB_LIBS = \
-    -L$(METIS_ARCH_PATH)/lib -lmetis
+    -L$(METIS_LIB_PATH) -lmetis

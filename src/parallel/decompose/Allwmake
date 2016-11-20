@@ -38,7 +38,7 @@ wmakeMpiLib()
 
 wmakeLnInclude decompositionMethods
 
-if [ -n "$SCOTCH_ARCH_PATH" ]
+if [ -n "$SCOTCH_ARCH_PATH" -a -d "$SCOTCH_ARCH_PATH" ]
 then
     wmake $targetType scotchDecomp
 
@@ -52,7 +52,7 @@ fi
 
 
 # Try and build metisDecomp (has own logic)
-(cd metisDecomp && ./Allwmake $targetType)
+metisDecomp/Allwmake $targetType
 
 wmake $targetType decompositionMethods
 wmake $targetType decompose

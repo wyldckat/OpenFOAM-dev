@@ -25,19 +25,45 @@
 #     etc/config.sh/scotch
 #
 # Description
-#     Setup file for scotch include/libraries.
+#     Setup file for SCOTCH include/libraries.
 #     Sourced during wmake process only.
 #
 # Note
 #     A csh version is not needed, since the values here are only sourced
 #     during the wmake process
 #
-#     If Scotch is to be entirely disabled, either rename this file or create
+#     If SCOTCH is to be entirely disabled, either rename this file or create
 #     an empty one with the same name at a user or site location.
 #
 #------------------------------------------------------------------------------
 
+# Main settings
+# ~~~~~~~~~~~~~
+
+# Identifier, usually composed by name and version
 export SCOTCH_VERSION=scotch_6.0.3
+
+# This is the main installation path (must exist)
 export SCOTCH_ARCH_PATH=$WM_THIRD_PARTY_DIR/platforms/$WM_ARCH$WM_COMPILER$WM_PRECISION_OPTION$WM_LABEL_OPTION/$SCOTCH_VERSION
+
+
+# Main header and library paths
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# This is the path to the header files
+export SCOTCH_INCLUDE_PATH=$SCOTCH_ARCH_PATH/include
+
+# This is the path to the serial build of the 'scotch' library
+export SCOTCH_LIB_PATH=$FOAM_EXT_LIBBIN
+
+
+# MPI header and library paths
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# This is the path to the header files for the 'ptscotch' library
+export PTSCOTCH_INCLUDE_PATH=$SCOTCH_ARCH_PATH/include/$FOAM_MPI
+
+# This is the path to the 'ptscotch' library
+export PTSCOTCH_LIB_PATH=$FOAM_EXT_LIBBIN/$FOAM_MPI
 
 #------------------------------------------------------------------------------

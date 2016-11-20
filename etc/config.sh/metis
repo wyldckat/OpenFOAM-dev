@@ -25,16 +25,35 @@
 #     etc/config.sh/metis
 #
 # Description
-#     Setup file for metis include/libraries.
+#     Setup file for METIS include/libraries.
 #     Sourced during wmake process only.
 #
 # Note
 #     A csh version is not needed, since the values here are only sourced
 #     during the wmake process
 #
+#     If METIS is to be entirely disabled, either rename this file or create
+#     an empty one with the same name at a user or site location.
+#
 #------------------------------------------------------------------------------
 
+# Main settings
+# ~~~~~~~~~~~~~
+
+# Identifier, usually composed by name and version
 export METIS_VERSION=metis-5.1.0
+
+# This is the main installation path (must exist)
 export METIS_ARCH_PATH=$WM_THIRD_PARTY_DIR/platforms/$WM_ARCH$WM_COMPILER$WM_PRECISION_OPTION$WM_LABEL_OPTION/$METIS_VERSION
+
+
+# Main header and library paths
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# This is the path to the header files
+export METIS_INCLUDE_PATH=$METIS_ARCH_PATH/include
+
+# This is the path to the 'metis' library
+export METIS_LIB_PATH=$FOAM_EXT_LIBBIN
 
 #------------------------------------------------------------------------------
