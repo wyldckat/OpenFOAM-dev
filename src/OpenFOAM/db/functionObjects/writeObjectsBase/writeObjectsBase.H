@@ -25,8 +25,35 @@ Class
     Foam::functionObjects::writeObjectsBase
 
 Description
-    functionObject base class for managing a list of objects on behalf of the
+    FunctionObject base class for managing a list of objects on behalf of the
     inheriting function object, on when those should be written to disk.
+
+    FunctionObjects that inherit this class will receive the additional
+    dictionary option \c objects which allows selecting which fields of the
+    inherited function should be written to disk when \c write() is called.
+    When omitted, it will write all objects and when the list is empty, it will
+    not write any of the inheriting function object's managed objects.
+
+    Example of function object specification:
+    \verbatim
+    functions
+    {
+        <functionObjectName>
+        {
+            ...
+            objects     (obj1 obj2);
+            ...
+        }
+    }
+    \endverbatim
+
+    Where:
+    \table
+        Property | Description                       | Required | Default value
+        objects  | List of objects to be written     | no       | ".*"
+    \endtable
+
+    Note: Regular expressions can also be used in \c objects.
 
 See also
     Foam::functionObject
