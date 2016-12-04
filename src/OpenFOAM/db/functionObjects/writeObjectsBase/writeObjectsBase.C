@@ -117,7 +117,7 @@ bool Foam::functionObjects::writeObjectsBase::read(const dictionary& dict)
     }
     else
     {
-        writeObjectNames_.setSize(1, wordRe(".*"));
+        writeObjectNames_.setSize(1,wordRe(".*",wordRe::DETECT));
     }
 
     return true;
