@@ -36,14 +36,11 @@ Description
 
     Example of function object specification:
     \verbatim
-    functions
+    <functionObjectName>
     {
-        <functionObjectName>
-        {
-            ...
-            objects     (obj1 obj2);
-            ...
-        }
+        ...
+        objects     (obj1 obj2);
+        ...
     }
     \endverbatim
 
