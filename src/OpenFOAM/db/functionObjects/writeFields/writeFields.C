@@ -124,23 +124,26 @@ bool Foam::functionObjects::writeFields::read(const dictionary& dict)
 
 bool Foam::functionObjects::writeFields::write()
 {
-    if (!writeObr_.time().writeTime())
-    {
-        writeObr_.time().writeTimeDict();
-    }
-
     wordList names(objectNames());
 
     if(!names.empty())
     {
         if(writeLog_) Info << typeName_ << " " << name_ << " write:" << nl;
-    }
 
-    forAll(names, i)
-    {
-        const regIOobject& obj = writeObr_.lookupObject<regIOobject>(names[i]);
+        if (!writeObr_.time().writeTime())
+        {
+            writeObr_.time().writeTimeDict();
+        }
 
-        writeObject(obj);
+        forAll(names, i)
+        {
+            const regIOobject& obj =
+                writeObr_.lookupObject<regIOobject>(names[i]);
+
+            writeObject(obj);
+        }
+
+        if(writeLog_) Info << endl;
     }
 
     return true;

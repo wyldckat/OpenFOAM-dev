@@ -29,12 +29,13 @@ Group
 
 Description
     Evaluates and outputs turbulence y+ for  models.  Values written to
-    time directories as field 'yPlus'
+    time directories as field 'yPlus'.
 
 See also
     Foam::functionObject
     Foam::functionObjects::fvMeshFunctionObject
     Foam::functionObjects::logFiles
+    Foam::functionObjects::writeFiles
     Foam::functionObjects::timeControl
 
 SourceFiles

@@ -200,8 +200,13 @@ bool Foam::functionObjects::yPlus::write()
 
     logFiles::write();
 
+    const volScalarField& yPlus =
+        mesh_.lookupObject<volScalarField>(type());
+
     const volScalarField::Boundary& yPlusBf = yPlus.boundaryField();
     const fvPatchList& patches = mesh_.boundary();
+
+    Log << type() << " " << name() << " write:" << nl;
 
     forAll(patches, patchi)
     {
@@ -231,6 +236,8 @@ bool Foam::functionObjects::yPlus::write()
             }
         }
     }
+
+    Log << endl;
 
     return true;
 }
