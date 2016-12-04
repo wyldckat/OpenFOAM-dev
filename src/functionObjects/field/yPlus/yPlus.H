@@ -47,6 +47,7 @@ SourceFiles
 
 #include "fvMeshFunctionObject.H"
 #include "logFiles.H"
+#include "writeFields.H"
 #include "volFieldsFwd.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -67,7 +68,8 @@ namespace functionObjects
 class yPlus
 :
     public fvMeshFunctionObject,
-    public logFiles
+    public logFiles,
+    public writeFields
 {
     // Private Member Functions
 

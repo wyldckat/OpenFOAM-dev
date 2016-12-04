@@ -228,6 +228,7 @@ db/functionObjects/functionObject/functionObject.C
 db/functionObjects/functionObjectList/functionObjectList.C
 db/functionObjects/writeFile/writeFile.C
 db/functionObjects/logFiles/logFiles.C
+db/functionObjects/writeFields/writeFields.C
 db/functionObjects/timeControl/timeControl.C
 db/functionObjects/timeControl/timeControlFunctionObject.C
 db/functionObjects/regionFunctionObject/regionFunctionObject.C
