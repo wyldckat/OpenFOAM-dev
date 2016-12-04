@@ -22,72 +22,69 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::functionObjects::writeFields
+    Foam::functionObjects::writeObjectsBase
 
 Description
-    functionObject base class for managing the list of fields handled locally
-    by the derived function object.
+    functionObject base class for managing a list of objects on behalf of the
+    inheriting function object, on when those should be written to disk.
 
 See also
     Foam::functionObject
 
 SourceFiles
-    writeFields.C
+    writeObjectsBase.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef functionObjects_writeFields_H
-#define functionObjects_writeFields_H
+#ifndef functionObjects_writeObjectsBase_H
+#define functionObjects_writeObjectsBase_H
 
 #include "wordList.H"
 #include "wordReList.H"
-#include "Switch.H"
-#include "objectRegistry.H"
-
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
+
+// Forward declaration of classes
+class objectRegistry;
+class regIOobject;
+class functionObject;
+
 namespace functionObjects
 {
 
 /*---------------------------------------------------------------------------*\
-                     Class writeFields Declaration
+                     Class writeObjectsBase Declaration
 \*---------------------------------------------------------------------------*/
 
-class writeFields
+class writeObjectsBase
 {
 
 protected:
 
     // Protected data
 
-        //- Parent type name
-        const word& typeName_;
-
-        //- Parent name
-        const word& name_;
-
         //- Reference to the region objectRegistry
         const objectRegistry& writeObr_;
 
-        //- Reference to main log switch
-        const Switch& writeLog_;
+        //- Reference to the inheriting function object
+        const functionObject& funcObj_;
 
-        //- Field names handled by this function object
-        wordList localFieldNames_;
+        //- Object names that are handled on behalf of the inheritor
+        wordList localObjectNames_;
 
-        //- Field names to be written
-        wordReList writeFieldNames_;
+        //- Object names requested by the user to be written
+        wordReList writeObjectNames_;
 
     // Protected Member Functions
 
-        //- Reset the list of local field names from a single word
-        virtual void resetLocalFieldName(const word& name);
+        //- Reset the list of local object names from a single word
+        virtual void resetLocalObjectName(const word& name);
 
-        //- Reset the list of local field names from a wordList
-        virtual void resetLocalFieldNames(const wordList& names);
+        //- Reset the list of local object names from a wordList
+        virtual void resetLocalObjectNames(const wordList& names);
 
         //- Get the list of field names to be written
         virtual wordList objectNames();
@@ -100,39 +97,37 @@ private:
     // Private Member Functions
 
         //- Disallow default bitwise copy construct
-        writeFields(const writeFields&);
+        writeObjectsBase(const writeObjectsBase&);
 
         //- Disallow default bitwise assignment
-        void operator=(const writeFields&);
+        void operator=(const writeObjectsBase&);
 
 
 public:
 
     // Constructors
 
-        //- Construct from objectRegistry and prefix
-        writeFields
+        //- Construct from objectRegistry and inheriting function object
+        writeObjectsBase
         (
             const objectRegistry& obr,
-            const word& name,
-            const word& type,
-            const Switch& logRef
+            functionObject& obj
         );
 
 
     //- Destructor
-    virtual ~writeFields();
+    virtual ~writeObjectsBase();
 
 
     // Member Functions
 
-        //- Return const access to the local field names
-        const wordList& localFieldNames() const;
+        //- Return const access to the local object names
+        const wordList& localObjectNames() const;
 
-        //- Return const access to the field names to be written
-        const wordReList& writeFieldNames() const;
+        //- Return const access to the object names requested to be written
+        const wordReList& writeObjectNames() const;
 
-        //- Read the list of fields to be written
+        //- Read the list of objects to be written
         virtual bool read(const dictionary&);
 
         //- Write function

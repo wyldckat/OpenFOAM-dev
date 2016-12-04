@@ -23,44 +23,50 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "writeFields.H"
+#include "writeObjectsBase.H"
 #include "Time.H"
 #include "stringListOps.H"
 #include "dictionary.H"
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
-void Foam::functionObjects::writeFields::resetLocalFieldName(const word& name)
+void Foam::functionObjects::writeObjectsBase::resetLocalObjectName
+(
+    const word& name
+)
 {
-    localFieldNames_.clear();
-    localFieldNames_.append(name);
+    localObjectNames_.clear();
+    localObjectNames_.append(name);
 }
 
 
-void Foam::functionObjects::writeFields::resetLocalFieldNames
+void Foam::functionObjects::writeObjectsBase::resetLocalObjectNames
 (
     const wordList& names
 )
 {
-    localFieldNames_.clear();
-    localFieldNames_.append(names);
+    localObjectNames_.clear();
+    localObjectNames_.append(names);
 }
 
 
-Foam::wordList Foam::functionObjects::writeFields::objectNames()
+Foam::wordList Foam::functionObjects::writeObjectsBase::objectNames()
 {
     wordList names_
     (
-        subsetStrings(wordReListMatcher(writeFieldNames_), localFieldNames_)
+        subsetStrings(wordReListMatcher(writeObjectNames_), localObjectNames_)
     );
 
     return names_;
 }
 
 
-void Foam::functionObjects::writeFields::writeObject(const regIOobject& obj)
+void Foam::functionObjects::writeObjectsBase::writeObject
+(
+    const regIOobject& obj
+)
 {
-    if(writeLog_) Info << "    writing field " << obj.name() << endl;
+    if(funcObj_.log) Info << "    writing field " << obj.name() << endl;
 
     obj.write();
 }
@@ -68,61 +74,57 @@ void Foam::functionObjects::writeFields::writeObject(const regIOobject& obj)
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::functionObjects::writeFields::writeFields
+Foam::functionObjects::writeObjectsBase::writeObjectsBase
 (
     const objectRegistry& obr,
-    const word& name,
-    const word& typeName,
-    const Switch& logRef
+    functionObject& obj
 )
 :
-    typeName_(typeName),
-    name_(name),
     writeObr_(obr),
-    writeLog_(logRef),
-    localFieldNames_(),
-    writeFieldNames_()
+    funcObj_(obj),
+    localObjectNames_(),
+    writeObjectNames_()
 {}
 
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
-Foam::functionObjects::writeFields::~writeFields()
+Foam::functionObjects::writeObjectsBase::~writeObjectsBase()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 const Foam::wordList&
-Foam::functionObjects::writeFields::localFieldNames() const
+Foam::functionObjects::writeObjectsBase::localObjectNames() const
 {
-    return localFieldNames_;
+    return localObjectNames_;
 }
 
 
 const Foam::wordReList&
-Foam::functionObjects::writeFields::writeFieldNames() const
+Foam::functionObjects::writeObjectsBase::writeObjectNames() const
 {
-    return writeFieldNames_;
+    return writeObjectNames_;
 }
 
 
-bool Foam::functionObjects::writeFields::read(const dictionary& dict)
+bool Foam::functionObjects::writeObjectsBase::read(const dictionary& dict)
 {
-    if (dict.found("writeFields"))
+    if (dict.found("objects"))
     {
-        dict.lookup("writeFields") >> writeFieldNames_;
+        dict.lookup("objects") >> writeObjectNames_;
     }
     else
     {
-        writeFieldNames_.setSize(1, wordRe(".*"));
+        writeObjectNames_.setSize(1, wordRe(".*"));
     }
 
     return true;
 }
 
 
-bool Foam::functionObjects::writeFields::write()
+bool Foam::functionObjects::writeObjectsBase::write()
 {
     wordList names(objectNames());
 
