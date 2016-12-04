@@ -128,8 +128,6 @@ bool Foam::functionObjects::writeFields::write()
 
     if(!names.empty())
     {
-        if(writeLog_) Info << typeName_ << " " << name_ << " write:" << nl;
-
         if (!writeObr_.time().writeTime())
         {
             writeObr_.time().writeTimeDict();
@@ -142,8 +140,6 @@ bool Foam::functionObjects::writeFields::write()
 
             writeObject(obj);
         }
-
-        if(writeLog_) Info << endl;
     }
 
     return true;
