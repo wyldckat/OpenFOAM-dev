@@ -47,7 +47,7 @@ Description
     }
     \endverbatim
 
-    Where:
+Usage
     \table
         Property | Description                       | Required | Default value
         objects  | List of objects to be written     | no       | ".*"
@@ -77,7 +77,7 @@ namespace Foam
 // Forward declaration of classes
 class objectRegistry;
 class regIOobject;
-class functionObject;
+class Switch;
 
 namespace functionObjects
 {
@@ -96,8 +96,8 @@ protected:
         //- Reference to the region objectRegistry
         const objectRegistry& writeObr_;
 
-        //- Reference to the inheriting function object
-        const functionObject& funcObj_;
+        //- Reference to the inheriting function object's log variable
+        const Switch& log_;
 
         //- Object names that are handled on behalf of the inheritor
         wordList localObjectNames_;
@@ -119,6 +119,7 @@ protected:
         //- Write the requested registered IO object
         virtual void writeObject(const regIOobject& obj);
 
+
 private:
 
     // Private Member Functions
@@ -138,7 +139,7 @@ public:
         writeObjectsBase
         (
             const objectRegistry& obr,
-            functionObject& obj
+            const Switch& logRef
         );
 
 

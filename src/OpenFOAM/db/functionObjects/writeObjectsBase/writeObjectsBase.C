@@ -66,7 +66,7 @@ void Foam::functionObjects::writeObjectsBase::writeObject
     const regIOobject& obj
 )
 {
-    if(funcObj_.log) Info << "    writing field " << obj.name() << endl;
+    if(log_) Info << "    writing field " << obj.name() << endl;
 
     obj.write();
 }
@@ -77,11 +77,11 @@ void Foam::functionObjects::writeObjectsBase::writeObject
 Foam::functionObjects::writeObjectsBase::writeObjectsBase
 (
     const objectRegistry& obr,
-    functionObject& obj
+    const Switch& log
 )
 :
     writeObr_(obr),
-    funcObj_(obj),
+    log_(log),
     localObjectNames_(),
     writeObjectNames_()
 {}

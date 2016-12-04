@@ -122,7 +122,7 @@ Foam::functionObjects::yPlus::yPlus
 :
     fvMeshFunctionObject(name, runTime, dict),
     logFiles(obr_, name),
-    writeObjectsBase(obr_, *this)
+    writeObjectsBase(obr_, log)
 {
     volScalarField* yPlusPtr
     (
