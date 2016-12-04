@@ -204,7 +204,7 @@ bool Foam::functionObjects::writeObjects::read(const dictionary& dict)
         writeOption_ = ANY_WRITE;
     }
 
-    return true;
+    return functionObject::read(dict);
 }
 
 
@@ -219,6 +219,8 @@ bool Foam::functionObjects::writeObjects::write()
     Info<< type() << " " << name() << " write:" << nl;
 
     writeObjectsBase::write();
+
+    Log << endl;
 
     return true;
 }
