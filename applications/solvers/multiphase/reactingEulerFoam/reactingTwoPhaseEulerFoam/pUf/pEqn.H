@@ -32,10 +32,10 @@ surfaceScalarField rAUf1
     IOobject::groupName("rAUf", phase1.name()),
     1.0
    /(
-        (alphaRhof10 + Vmf)/runTime.deltaT()
+        byDt(alphaRhof10 + Vmf)
       + fvc::interpolate(U1Eqn.A())
       + Kdf
-   )
+    )
 );
 
 surfaceScalarField rAUf2
@@ -43,10 +43,10 @@ surfaceScalarField rAUf2
     IOobject::groupName("rAUf", phase2.name()),
     1.0
    /(
-        (alphaRhof20 + Vmf)/runTime.deltaT()
+        byDt(alphaRhof20 + Vmf)
       + fvc::interpolate(U2Eqn.A())
       + Kdf
-   )
+    )
 );
 
 
@@ -157,7 +157,7 @@ while (pimple.correct())
         rAUf1
        *(
             (alphaRhof10 + Vmf)
-           *MRF.absolute(phi1.oldTime())/runTime.deltaT()
+           *byDt(MRF.absolute(phi1.oldTime()))
           + fvc::flux(U1Eqn.H())
           + Vmf*ddtPhi2
           + Kdf*MRF.absolute(phi2)
@@ -175,7 +175,7 @@ while (pimple.correct())
         rAUf2
        *(
             (alphaRhof20 + Vmf)
-           *MRF.absolute(phi2.oldTime())/runTime.deltaT()
+           *byDt(MRF.absolute(phi2.oldTime()))
           + fvc::flux(U2Eqn.H())
           + Vmf*ddtPhi1
           + Kdf*MRF.absolute(phi1)
