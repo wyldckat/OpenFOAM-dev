@@ -25,39 +25,51 @@ License
 
 #include "writeObjectsBase.H"
 #include "Time.H"
-#include "stringListOps.H"
 #include "dictionary.H"
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
-void Foam::functionObjects::writeObjectsBase::resetLocalObjectName
+void Foam::functionObjects::writeObjectsBase::resetWriteObjectName
 (
-    const word& name
+    const wordRe& name
 )
 {
-    localObjectNames_.clear();
-    localObjectNames_.append(name);
+    writeObjectNames_.clear();
+    writeObjectNames_.append(name);
 }
 
 
-void Foam::functionObjects::writeObjectsBase::resetLocalObjectNames
+void Foam::functionObjects::writeObjectsBase::resetWriteObjectNames
 (
-    const wordList& names
+    const wordReList& names
 )
 {
-    localObjectNames_.clear();
-    localObjectNames_.append(names);
+    writeObjectNames_.clear();
+    writeObjectNames_.append(names);
 }
 
 
 Foam::wordList Foam::functionObjects::writeObjectsBase::objectNames()
 {
-    wordList names_
-    (
-        subsetStrings(wordReListMatcher(writeObjectNames_), localObjectNames_)
-    );
+    DynamicList<word> allNames(writeObr_.toc().size());
+    forAll(writeObjectNames_, i)
+    {
+        wordList names(writeObr_.names<regIOobject>(writeObjectNames_[i]));
 
-    return names_;
+        if (names.size())
+        {
+            allNames.append(names);
+        }
+        else
+        {
+            WarningInFunction
+                << "Object " << writeObjectNames_[i] << " not found in "
+                << "database. Available objects:" << nl << writeObr_.sortedToc()
+                << endl;
+        }
+    }
+
+    return allNames;
 }
 
 
@@ -66,7 +78,7 @@ void Foam::functionObjects::writeObjectsBase::writeObject
     const regIOobject& obj
 )
 {
-    if(log_) Info << "    writing field " << obj.name() << endl;
+    if (log_) Info << "    writing object " << obj.name() << endl;
 
     obj.write();
 }
@@ -81,9 +93,7 @@ Foam::functionObjects::writeObjectsBase::writeObjectsBase
 )
 :
     writeObr_(obr),
-    log_(log),
-    localObjectNames_(),
-    writeObjectNames_()
+    log_(log)
 {}
 
 
@@ -95,15 +105,8 @@ Foam::functionObjects::writeObjectsBase::~writeObjectsBase()
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-const Foam::wordList&
-Foam::functionObjects::writeObjectsBase::localObjectNames() const
-{
-    return localObjectNames_;
-}
-
-
 const Foam::wordReList&
-Foam::functionObjects::writeObjectsBase::writeObjectNames() const
+Foam::functionObjects::writeLocalObjects::writeObjectNames() const
 {
     return writeObjectNames_;
 }
@@ -111,14 +114,7 @@ Foam::functionObjects::writeObjectsBase::writeObjectNames() const
 
 bool Foam::functionObjects::writeObjectsBase::read(const dictionary& dict)
 {
-    if (dict.found("objects"))
-    {
-        dict.lookup("objects") >> writeObjectNames_;
-    }
-    else
-    {
-        writeObjectNames_.setSize(1,wordRe(".*",wordRe::DETECT));
-    }
+    dict.lookup("objects") >> writeObjectNames_;
 
     return true;
 }

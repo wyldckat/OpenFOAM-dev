@@ -22,16 +22,18 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::functionObjects::writeObjectsBase
+    Foam::functionObjects::writeLocalObjects
 
 Description
-    FunctionObject base class for writing a list of objects registered to the
-    database, on behalf of the inheriting function object, on when those should
-    be written to disk.
+    FunctionObject base class for managing a list of objects on behalf of the
+    inheriting function object, on when those should be written to disk.
 
     FunctionObjects that inherit this class will receive the additional
     dictionary option \c objects which allows selecting which fields of the
     inherited function should be written to disk when \c write() is called.
+    When \c objects is omitted, it will write all objects and when that list is
+    empty, it will not write any of the inheriting function object's managed
+    objects.
 
     Example of function object specification:
     \verbatim
@@ -46,26 +48,25 @@ Description
 Usage
     \table
         Property | Description                       | Required | Default value
-        objects  | List of objects to be written     | yes      |
+        objects  | List of objects to be written     | no       | ".*"
     \endtable
 
     Note: Regular expressions can also be used in \c objects.
 
 See also
     Foam::functionObject
-    Foam::functionObjects::writeObjects
-    Foam::functionObjects::writeLocalObjects
+    Foam::functionObjects::writeObjectsBase
 
 SourceFiles
-    writeObjectsBase.C
+    writeLocalObjects.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef functionObjects_writeObjectsBase_H
-#define functionObjects_writeObjectsBase_H
+#ifndef functionObjects_writeLocalObjects_H
+#define functionObjects_writeLocalObjects_H
 
 #include "wordList.H"
-#include "wordReList.H"
+#include "writeObjectsBase.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -81,39 +82,31 @@ namespace functionObjects
 {
 
 /*---------------------------------------------------------------------------*\
-                     Class writeObjectsBase Declaration
+                     Class writeLocalObjects Declaration
 \*---------------------------------------------------------------------------*/
 
-class writeObjectsBase
+class writeLocalObjects
+:
+    public writeObjectsBase
 {
 
 protected:
 
     // Protected data
 
-        //- Reference to the region objectRegistry
-        const objectRegistry& writeObr_;
-
-        //- Reference to the inheriting function object's log variable
-        const Switch& log_;
-
-        //- Object names requested by the user to be written
-        wordReList writeObjectNames_;
+        //- Object names that are handled on behalf of the inheritor
+        wordList localObjectNames_;
 
     // Protected Member Functions
 
-        //- Reset the list of object names to be written to a single regular
-        //  expression
-        void resetWriteObjectName(const wordRe& name);
+        //- Reset the list of local object names from a single word
+        void resetLocalObjectName(const word& name);
 
-        //- Reset the list of object names to be written
-        void resetWriteObjectNames(const wordReList& names);
+        //- Reset the list of local object names from a wordList
+        void resetLocalObjectNames(const wordList& names);
 
         //- Get the list of field names to be written
         virtual wordList objectNames();
-
-        //- Write the requested registered IO object
-        virtual void writeObject(const regIOobject& obj);
 
 
 private:
@@ -121,10 +114,10 @@ private:
     // Private Member Functions
 
         //- Disallow default bitwise copy construct
-        writeObjectsBase(const writeObjectsBase&);
+        writeLocalObjects(const writeLocalObjects&);
 
         //- Disallow default bitwise assignment
-        void operator=(const writeObjectsBase&);
+        void operator=(const writeLocalObjects&);
 
 
 public:
@@ -132,7 +125,7 @@ public:
     // Constructors
 
         //- Construct from objectRegistry and inheriting function object
-        writeObjectsBase
+        writeLocalObjects
         (
             const objectRegistry& obr,
             const Switch& logRef
@@ -140,19 +133,17 @@ public:
 
 
     //- Destructor
-    virtual ~writeObjectsBase();
+    virtual ~writeLocalObjects();
 
 
     // Member Functions
 
-        //- Return const access to the object names requested to be written
-        const wordReList& writeObjectNames() const;
+        //- Return const access to the local object names
+        const wordList& localObjectNames() const;
 
         //- Read the list of objects to be written
         virtual bool read(const dictionary&);
 
-        //- Write function
-        virtual bool write();
 };
 
 
