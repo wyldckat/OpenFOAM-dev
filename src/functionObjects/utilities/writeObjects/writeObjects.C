@@ -66,31 +66,6 @@ const Foam::NamedEnum
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
-
-Foam::wordList Foam::functionObjects::writeObjects::objectNames()
-{
-    DynamicList<word> allNames(writeObr_.toc().size());
-    forAll(writeObjectNames_, i)
-    {
-        wordList names(writeObr_.names<regIOobject>(writeObjectNames_[i]));
-
-        if (names.size())
-        {
-            allNames.append(names);
-        }
-        else
-        {
-            WarningInFunction
-                << "Object " << writeObjectNames_[i] << " not found in "
-                << "database. Available objects:" << nl << writeObr_.sortedToc()
-                << endl;
-        }
-    }
-
-    return allNames;
-}
-
-
 void Foam::functionObjects::writeObjects::writeObject
 (
     const regIOobject& obj
@@ -140,9 +115,7 @@ void Foam::functionObjects::writeObjects::writeObject
     }
     else
     {
-        Log << "    writing object " << obj.name() << endl;
-
-        obj.write();
+        writeObjectsBase::writeObject(obj);
     }
 }
 
@@ -192,7 +165,7 @@ bool Foam::functionObjects::writeObjects::read(const dictionary& dict)
     }
     else
     {
-        dict.lookup("objects") >> writeObjectNames_;
+        writeObjectsBase::read(dict);
     }
 
     if (dict.found("writeOption"))
