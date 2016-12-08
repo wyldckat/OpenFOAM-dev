@@ -228,7 +228,7 @@ bool Foam::functionObjects::wallShearStress::execute()
 
 bool Foam::functionObjects::wallShearStress::write()
 {
-    Log << type() << " " << name() << " write:" << nl
+    Log << type() << " " << name() << " write:" << nl;
 
     writeLocalObjects::write();
 

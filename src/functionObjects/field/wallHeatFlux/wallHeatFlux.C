@@ -232,7 +232,7 @@ bool Foam::functionObjects::wallHeatFlux::execute()
 
 bool Foam::functionObjects::wallHeatFlux::write()
 {
-    Log << type() << " " << name() << " write:" << nl
+    Log << type() << " " << name() << " write:" << nl;
 
     writeLocalObjects::write();
 
