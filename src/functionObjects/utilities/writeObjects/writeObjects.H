@@ -130,7 +130,7 @@ private:
     // Private Member Functions
 
         //- Write the requested registered IO object
-        void writeObject(const regIOobject& obj);
+        virtual void writeObject(const regIOobject& obj);
 
         //- Disallow default bitwise copy construct
         writeObjects(const writeObjects&);

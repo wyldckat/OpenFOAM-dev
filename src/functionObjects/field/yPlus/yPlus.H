@@ -28,8 +28,12 @@ Group
     grpFieldFunctionObjects
 
 Description
-    Evaluates and outputs turbulence y+ for  models.  Values written to
+    Evaluates and outputs turbulence y+ for models. Values written to
     time directories as field 'yPlus'.
+
+Note
+    Writing field 'yPlus' is done by default, but it can be overridden by
+    defining an empty \c objects list. For details see writeLocalObjects.
 
 See also
     Foam::functionObject
