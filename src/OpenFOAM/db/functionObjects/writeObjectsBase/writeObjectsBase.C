@@ -106,7 +106,7 @@ Foam::functionObjects::writeObjectsBase::~writeObjectsBase()
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 const Foam::wordReList&
-Foam::functionObjects::writeLocalObjects::writeObjectNames() const
+Foam::functionObjects::writeObjectsBase::writeObjectNames() const
 {
     return writeObjectNames_;
 }
