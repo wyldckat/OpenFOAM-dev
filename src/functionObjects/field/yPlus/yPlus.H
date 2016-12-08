@@ -31,6 +31,22 @@ Description
     Evaluates and outputs turbulence y+ for models. Values written to
     time directories as field 'yPlus'.
 
+    Example of function object specification:
+    \verbatim
+    yPlus1
+    {
+        type        yPlus;
+        libs        ("libfieldFunctionObjects.so");
+        ...
+    }
+    \endverbatim
+
+Usage
+    \table
+        Property | Description                | Required   | Default value
+        type     | type name: yPlus           | yes        |
+    \endtable
+
 Note
     Writing field 'yPlus' is done by default, but it can be overridden by
     defining an empty \c objects list. For details see writeLocalObjects.
