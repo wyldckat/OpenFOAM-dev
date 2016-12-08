@@ -35,7 +35,7 @@ See also
     Foam::functionObject
     Foam::functionObjects::fvMeshFunctionObject
     Foam::functionObjects::logFiles
-    Foam::functionObjects::writeObjectsBase
+    Foam::functionObjects::writeLocalObjects
     Foam::functionObjects::timeControl
 
 SourceFiles
@@ -48,7 +48,7 @@ SourceFiles
 
 #include "fvMeshFunctionObject.H"
 #include "logFiles.H"
-#include "writeObjectsBase.H"
+#include "writeLocalObjects.H"
 #include "volFieldsFwd.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -70,7 +70,7 @@ class yPlus
 :
     public fvMeshFunctionObject,
     public logFiles,
-    public writeObjectsBase
+    public writeLocalObjects
 {
     // Private Member Functions
 

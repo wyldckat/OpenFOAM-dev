@@ -122,7 +122,7 @@ Foam::functionObjects::yPlus::yPlus
 :
     fvMeshFunctionObject(name, runTime, dict),
     logFiles(obr_, name),
-    writeObjectsBase(obr_, log)
+    writeLocalObjects(obr_, log)
 {
     volScalarField* yPlusPtr
     (
@@ -160,7 +160,7 @@ Foam::functionObjects::yPlus::~yPlus()
 bool Foam::functionObjects::yPlus::read(const dictionary& dict)
 {
     fvMeshFunctionObject::read(dict);
-    writeObjectsBase::read(dict);
+    writeLocalObjects::read(dict);
 
     return true;
 }
@@ -198,7 +198,7 @@ bool Foam::functionObjects::yPlus::write()
 {
     Log << type() << " " << name() << " write:" << nl;
 
-    writeObjectsBase::write();
+    writeLocalObjects::write();
 
     logFiles::write();
 
