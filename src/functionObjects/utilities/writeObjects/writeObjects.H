@@ -129,9 +129,6 @@ private:
 
     // Private Member Functions
 
-        //- Get the list of field names to be written
-        wordList objectNames();
-
         //- Write the requested registered IO object
         void writeObject(const regIOobject& obj);
 
